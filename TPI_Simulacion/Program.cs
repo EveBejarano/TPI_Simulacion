@@ -14,7 +14,11 @@ namespace TPI_Simulacion
             var generator = new RandomVariablegenerator
             {
                 DecimalAmount = 10000,
-                Fdp = 0.002083
+                A = 0,
+                B = 0.002083,
+                RandomVariableDecimalAmount = 6,
+                RandomNumberDecimalAmount = 4,
+
             };
             Console.WriteLine("         Modulo del programa que se encargara de generar los valores de las variables del LOTE 1");
             Console.WriteLine("----------------------------------------------------------------------------------------------------");
@@ -43,12 +47,17 @@ namespace TPI_Simulacion
             Console.WriteLine(whiteSpace + "A continuación,Se mostraran los R_i y los X_1 generados:");
             Console.WriteLine();
 
+
+            //Genera los numeros random y los valores de las variables
             for (var j = 1; j <= randomVariableAmount; j++)
             {
+                // genera el numero aleatorio
                 var r = generator.GenerateRandomNumber();
+
+                // genera los valores de las variables aleatorias
                 var x1 = generator.GenerateRandomVariableValue(r);
-                Console.WriteLine("{0} R1_{1} : {2}", whiteSpace, j , r);   //esta es para control nomas
-                Console.WriteLine("{0} X1_{1} : {2}", whiteSpace, j, x1);   //esto es para control nomas
+                Console.WriteLine("{0} R1_{1} : {2}", whiteSpace, j , r);  
+                Console.WriteLine("{0} X1_{1} : {2}", whiteSpace, j, x1);  
                 Console.WriteLine();
 
             }
