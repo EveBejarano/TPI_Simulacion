@@ -1,27 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TPI_Simulacion.Models
 {
-    class RandomVariableGenerator
+    class RandomVariablegenerator
     {
 
-        public int DecimalAmount { get; set; }
+        public float DecimalAmount { get; set; }
 
-        public double fdp { get; set; }
+        public double Fdp { get; set; }
 
-        public float GenerateRandomVariable()
+        public double GenerateRandomNumber()
         {
-            Random RandomNumberGenerator = new Random();
-            var r = RandomNumberGenerator.Next(0, DecimalAmount);
+            var randomNumbergenerator = new Random();
+            float r = (randomNumbergenerator.Next(0, (int)DecimalAmount));
             r = r / DecimalAmount;
             return r;
         }
 
-        public double GenerateRandomNumber(float r)
+        public double GenerateRandomVariableValue(double r)
         {
-            return (fdp * r);
+            return (Fdp * r);
         }
 
     }
