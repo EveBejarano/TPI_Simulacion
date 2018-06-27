@@ -10,20 +10,18 @@ namespace TPI_Simulacion
             int randomVariableAmount;
             var path = "Lote1.txt";
             const string whiteSpace = "   ";
-
+            var toB = 0.002083F;
             var generator = new RandomVariablegenerator
             {
-                DecimalAmount = 10000,
                 A = 0,
-                B = 0.002083,
+                B = toB,
                 RandomVariableDecimalAmount = 6,
                 RandomNumberDecimalAmount = 4,
-
             };
             Console.WriteLine("         Modulo del programa que se encargara de generar los valores de las variables del LOTE 1");
             Console.WriteLine("----------------------------------------------------------------------------------------------------");
             Console.WriteLine("         Funcion inversa para el LOTE 1");
-            Console.WriteLine("         X1_i = 0.002083 * Ri");
+            Console.WriteLine("         X1_i = {0} * Ri", toB);
             Console.WriteLine("");
             Console.WriteLine("====================================================================================================");
             
@@ -54,9 +52,9 @@ namespace TPI_Simulacion
                 // genera el numero aleatorio
                 var r = generator.GenerateRandomNumber();
 
+                Console.WriteLine("{0} R1_{1} : {2}", whiteSpace, j, r);
                 // genera los valores de las variables aleatorias
-                var x1 = generator.GenerateRandomVariableValue(r);
-                Console.WriteLine("{0} R1_{1} : {2}", whiteSpace, j , r);  
+                var x1 = generator.GenerateRandomVariableValue(r);  
                 Console.WriteLine("{0} X1_{1} : {2}", whiteSpace, j, x1);  
                 Console.WriteLine();
 

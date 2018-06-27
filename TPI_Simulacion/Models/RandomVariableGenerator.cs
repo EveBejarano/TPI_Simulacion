@@ -5,26 +5,26 @@ namespace TPI_Simulacion.Models
     class RandomVariablegenerator
     {
 
-        public float DecimalAmount { get; set; }
+        internal int DecimalAmount { get; set; }
 
-        public double A { get; set; }
-        public double B { get; set; }
+        public float A { get; set; }
+        public float B { get; set; }
         public int RandomVariableDecimalAmount { get; set; }
         public int RandomNumberDecimalAmount { get; set; }
 
-        public double GenerateRandomNumber()
+        public float GenerateRandomNumber()
         {
             var randomNumbergenerator = new Random();
-            float r = (randomNumbergenerator.Next(0, (int)DecimalAmount));
+            DecimalAmount = (int)Math.Pow(10, RandomNumberDecimalAmount);
+            float r = (randomNumbergenerator.Next(0, DecimalAmount));
             r = r / DecimalAmount;
-            var roundedR = (float)Math.Round(r, RandomNumberDecimalAmount);
-            return roundedR;
+            return r;
         }
 
-        public double GenerateRandomVariableValue(double r)
+        public float GenerateRandomVariableValue(float r)
         {
             r =(A + (B - A) * r);
-            var roundedR = (float)Math.Round(r, RandomVariableDecimalAmount);
+            float roundedR = (float)Math.Round(r, RandomVariableDecimalAmount);
             return roundedR; 
         }
 
