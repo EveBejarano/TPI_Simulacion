@@ -167,8 +167,8 @@ namespace TPI_Simulacion
             MinTA = int.MaxValue;
             ContMin = 0;
             MaxTE = int.MinValue;
-            float defaultValue = 0;
 
+            float defaultValue = 0;
             // cargar arreglos
             TC = Enumerable.Repeat(defaultValue, n).ToList();
             N = Enumerable.Repeat(defaultValue, n).ToList(); ;
@@ -257,13 +257,15 @@ namespace TPI_Simulacion
 
         private static  void ImprimirResultados()
         {
+            Console.WriteLine("PTO: el Porcentaje de tiempo ocioso.");
+            Console.WriteLine("PMNC: el Porcentaje de mandados que no se pudieron concretar debido al tiempo de demora.");
+            Console.WriteLine("PPS: el Promedio de permanencia del cliente en el sistema.");
+            Console.WriteLine("PTE: el Promedio de tiempo en cola del cliente.");
+            Console.WriteLine("PA18: el Porcentaje de clientes que se arrepintieron porque el tiempo de espera era mayor a 18 minutos respecto del total de clientes que llamaron.");
+            Console.WriteLine("| Nº Cadetes  | PTO     | PMNC     | PPS      | PTE      |  PA18     |");
             for (int i = 0; i < n; i++)
             {
-                Console.WriteLine("Para el cadete {0}, el Porcentaje de tiempo ocioso es {1}", i, PTO[i]);
-                Console.WriteLine("Para el cadete {0}, el Porcentaje de mandados que no se pudieron concretar debido al tiempo de demora es {1}", i , PMNC[i]);
-                Console.WriteLine("Para el cadete {0}, el Promedio de permanencia del cliente en el sistema es {1}", i, PPS[i]);
-                Console.WriteLine("Para el cadete {0}, el Promedio de tiempo en cola del cliente es {1}", i, PTE[i]);
-                Console.WriteLine("Para el cadete {0}, el Porcentaje de clientes que se arrepintieron porque el tiempo de espera era mayor a 18 minutos respecto del total de clientes que llamaron es {1}", i, PA18[i]);
+                Console.WriteLine("|    {0}        | {1} | {2} | {3} | {4} | {5} |", i, PTO[i], PMNC[i], PPS[i], PTE[i], PA18[i]);
             }
 
             Console.WriteLine("El Porcentaje de clientes que tuvieron el máximo tiempo de atención sobre todos los clientes atendidos es {0}", PCMax);
