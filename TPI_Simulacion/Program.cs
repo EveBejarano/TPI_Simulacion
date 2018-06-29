@@ -113,7 +113,7 @@ namespace TPI_Simulacion
                 if (T <= TC[TCi])
                 {
                     // Tratar Arrepentimiento
-                    NOarrepentido = TratarArrepentimiento(TC[TCi]);
+                    NOarrepentido = TratarArrepentimiento(TC[TCi], TCi);
 
                     // No arrepentido
                     if (NOarrepentido)
