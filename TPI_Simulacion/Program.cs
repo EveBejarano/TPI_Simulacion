@@ -64,7 +64,7 @@ namespace TPI_Simulacion
         public List<float> NA18 { get; set; }
         public int ContMax { get; set; }
         public int MinTA { get; set; }
-        public int MaxTE { get; set; }
+        public float MaxTE { get; set; }
         public int ContMin { get; set; }
 
 
@@ -119,7 +119,7 @@ namespace TPI_Simulacion
                     if (NOarrepentido)
                     {
                         STE[TCi] += (TC[TCi] - T);
-                        TratarEspera();
+                        TratarEspera(TCi);
                         TC[TCi] += TA;
                         STA[TCi] += TA;
                         NE[TCi]++;
@@ -147,6 +147,39 @@ namespace TPI_Simulacion
             }
             CalculoResultados();
             ImprimirResultados();
+        }
+
+
+        private void CondicionesIniciales()
+        {
+            T = 0;
+            TPLL = 0;
+            NL = 0;
+
+            MaxTA = int.MinValue;
+            ContMax = 0;
+            MinTA = int.MaxValue;
+            ContMin = 0;
+            MaxTE = int.MinValue;
+            float defaultValue = 0;
+
+            // cargar arreglos
+            TC = Enumerable.Repeat(defaultValue, n).ToList();
+            N = Enumerable.Repeat(defaultValue, n).ToList(); ;
+            STP = Enumerable.Repeat(defaultValue, n).ToList(); ;
+            STA = Enumerable.Repeat(defaultValue, n).ToList();
+            STE = Enumerable.Repeat(defaultValue, n).ToList();
+            STO = Enumerable.Repeat(defaultValue, n).ToList();
+            NA = Enumerable.Repeat(defaultValue, n).ToList();
+            NE = Enumerable.Repeat(defaultValue, n).ToList();
+            NA18 = Enumerable.Repeat(defaultValue, n).ToList();
+
+        }
+
+        private int BuscarMenorTC(List<float> tc)
+        {
+            var min = tc.Min();
+            return tc.FindIndex(p => p == min);
         }
 
         private bool TratarArrepentimiento(float tci, int indexTCi)
@@ -188,15 +221,34 @@ namespace TPI_Simulacion
             return false;
         }
 
+        private void TratarEspera(int indexTCi)
+        {
+            if (TC[indexTCi] - T > MaxTE)
+            {
+                MaxTE = TC[indexTCi] - T;
+            }
+        }
+
+        private void CalculoResultados()
+        {
+            for (int i = 0; i < n; i++)
+            {
+                PTO[i] = (STO[i] * 100) / T;
+                PPS[i] = STP[i] / N[i];
+                PTE[i] = STE[i] / N[i];
+                PMNC[i] = (NA[i] * 100) / NE[i];
+                PA18[i] = (NA18[i] * 100) / NL;
+                PCMax[i] = (ContMax * 100) / N.Sum();
+                PCMin[i] = (ContMin * 100) / N.Sum();
+            }
+        }
+
         private void ImprimirResultados()
         {
             throw new NotImplementedException();
         }
 
-        private void CalculoResultados()
-        {
-            throw new NotImplementedException();
-        }
+
 
         private void TratarMinimo()
         {
@@ -208,42 +260,8 @@ namespace TPI_Simulacion
             throw new NotImplementedException();
         }
 
-        private bool TratarEspera()
-        {
-            throw new NotImplementedException();
-        }
-
-        private int BuscarMenorTC(List<float> tc)
-        {
-            var min = tc.Min();
-            return tc.FindIndex(p => p == min);
-        }
 
 
-        private void CondicionesIniciales()
-        {
-            T = 0;
-            TPLL = 0;
-            NL = 0;
 
-            MaxTA = int.MinValue;
-            ContMax = 0;
-            MinTA = int.MaxValue ;
-            ContMin = 0;
-            MaxTE = int.MinValue;
-            float defaultValue = 0;
-            
-            // cargar arreglos
-            TC = Enumerable.Repeat(defaultValue, n).ToList();
-            N = Enumerable.Repeat(defaultValue, n).ToList(); ;
-            STP = Enumerable.Repeat(defaultValue, n).ToList(); ;
-            STA = Enumerable.Repeat(defaultValue, n).ToList();
-            STE = Enumerable.Repeat(defaultValue, n).ToList();
-            STO = Enumerable.Repeat(defaultValue, n).ToList();
-            NA = Enumerable.Repeat(defaultValue, n).ToList();
-            NE = Enumerable.Repeat(defaultValue, n).ToList();
-            NA18 = Enumerable.Repeat(defaultValue, n).ToList();
-            
-        }
     }
 }
