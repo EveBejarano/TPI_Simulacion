@@ -237,6 +237,12 @@ namespace TPI_Simulacion
 
         private static  void CalculoResultados()
         {
+            PTO = Enumerable.Repeat((float)0, n).ToList();
+            PPS = Enumerable.Repeat((float)0, n).ToList();
+            PTE = Enumerable.Repeat((float)0, n).ToList();
+            PMNC = Enumerable.Repeat((float)0, n).ToList();
+            PA18 = Enumerable.Repeat((float)0, n).ToList();
+
             for (int i = 0; i < n; i++)
             {
                 PTO[i] = (STO[i] * 100) / T;
@@ -263,7 +269,7 @@ namespace TPI_Simulacion
             Console.WriteLine("El Porcentaje de clientes que tuvieron el máximo tiempo de atención sobre todos los clientes atendidos es {0}", PCMax);
             Console.WriteLine("El Porcentaje de clientes que tuvieron el mínimo tiempo de atención sobre todos los clientes atendidos: es {0}", PCMin);
             Console.WriteLine("El Máximo tiempo de espera de un cliente: MaxTE es {0}", MaxTE);
-
+            Console.ReadLine();
 
             ;
         }
