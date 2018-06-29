@@ -93,19 +93,29 @@ namespace TPI_Simulacion
             GeneradorIA = new GenerarVariableAleatoria("IA");
             GeneradorTA = new GenerarVariableAleatoria("TA");
 
+            // Condiciones Iniciales
             CondicionesIniciales();
 
             while(T <= TF)
             {
+                // T= TPLL
                 T = TPLL;
+
+                // Gen IA
                 IA = GeneradorIA.GenerarR();
+
+                //Buscar Menor TCi
                 var TCi = BuscarMenorTC(TC);
 
                 var NOarrepentido = true;
 
+                // T <= TCi
                 if (T <= TC[TCi])
                 {
-                    NOarrepentido = TratarArrepentimiento();
+                    // Tratar Arrepentimiento
+                    NOarrepentido = TratarArrepentimiento(TC[TCi]);
+
+                    // No arrepentido
                     if (NOarrepentido)
                     {
                         STE[TCi] += (TC[TCi] - T);
@@ -116,12 +126,14 @@ namespace TPI_Simulacion
                     }
                     
                 }
+                // T> TCi
                 else
                 {
                     STO[TCi] += (T - TC[TCi]);
-                    TC[TCi] += TA;
+                    TC[TCi] = T + TA;
                     STA[TCi] += TA;
                 }
+                // Fin condicional T<= TCi
 
                 if (NOarrepentido)
                 {
@@ -130,16 +142,50 @@ namespace TPI_Simulacion
                     TratarMaximo();
                     TratarMinimo();
                 }
+                // Si se arrepintio el cliente cuando T<= TCi, entonces "retorna aca"
 
-                NL++;
             }
             CalculoResultados();
             ImprimirResultados();
         }
 
-        private void TratarEspera()
+        private bool TratarArrepentimiento(float tci, int indexTCi)
         {
-            throw new NotImplementedException();
+            // TE = TCi - T
+            var TE = tci - T;
+
+            // Generar r
+            var randomNumbergenerator = new Random();
+            float r = (float)(randomNumbergenerator.NextDouble());
+
+            if (TE <= 15)
+            {
+                if (r <= 0.62)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (TE <= 20)
+                {
+                    if (r <= 0.15)
+                    {
+                        return true;
+                    }
+
+                }
+                if (TE >= 18)
+                {
+                    //NA18i = NA18i + 1
+                    NA18[indexTCi]++;
+                }
+            }
+
+            //NAi = NAi + 1
+            NA[indexTCi]++;
+
+            return false;
         }
 
         private void ImprimirResultados()
@@ -162,7 +208,7 @@ namespace TPI_Simulacion
             throw new NotImplementedException();
         }
 
-        private bool TratarArrepentimiento()
+        private bool TratarEspera()
         {
             throw new NotImplementedException();
         }
