@@ -29,8 +29,8 @@ namespace TPI_Simulacion.Models
                     RandomVariablegenerator = new RandomVariablegenerator
                     {
                         DecimalAmount = 10000,
-                        A = 0,
-                        B = 0.002083,
+                        A = 0.003472,
+                        B = 0.008333,
                         RandomVariableDecimalAmount = 6,
                         RandomNumberDecimalAmount = 4,
 

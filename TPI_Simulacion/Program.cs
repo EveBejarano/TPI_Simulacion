@@ -9,68 +9,68 @@ namespace TPI_Simulacion
 {
     class Program
     {
-        public GenerarVariableAleatoria GeneradorIA { get; set; }
-        public GenerarVariableAleatoria GeneradorTA { get; set; }
+        public static GenerarVariableAleatoria GeneradorIA { get; set; }
+        public static GenerarVariableAleatoria GeneradorTA { get; set; }
 
         #region Variables Endogenas y Exogenas
         //Cantidad de cadetes
-        public int n { get; set; }
+        public static int n { get; set; }
 
         //Tiempo comprometido de cada cadete
-        public List<float> TC { get; set; }
+        public static List<float> TC { get; set; }
 
         //Porcentaje de tiempo ocioso de cada cadete
-        public List<float> PTO { get; set; }
+        public static List<float> PTO { get; set; }
 
         //Porcentaje de mandados que no se pudieron concretar debido al tiempo de demora por cada cadete
-        public List<float> PMNC { get; set; }
+        public static List<float> PMNC { get; set; }
 
         //Promedio de permanencia del cliente en el sistema por cada cadete
-        public List<float> PPS { get; set; }
+        public static List<float> PPS { get; set; }
 
         //Promedio de tiempo en cola del cliente por cada cadete
-        public List<float> PTE { get; set; }
+        public static List<float> PTE { get; set; }
 
         //Porcentaje de clientes que se arrepintieron porque el tiempo de espera era mayor a 18 minutos respecto del total de clientes que llamaron, por cada cadete
-        public List<float> PA18 { get; set; }
+        public static List<float> PA18 { get; set; }
 
         //Porcentaje de clientes que tuvieron el máximo tiempo de atención sobre todos los clientes atendidos: PCMax
-        public List<float> PCMax { get; set; }
+        public static float PCMax { get; set; }
 
         //Porcentaje de clientes que tuvieron el mínimo tiempo de atención sobre todos los clientes atendidos: PCMin
-        public List<float> PCMin { get; set; }
+        public static float PCMin { get; set; }
 
         //Máximo tiempo de espera de un cliente: MaxTA
-        public float MaxTA { get; set; }
+        public static float MaxTA { get; set; }
 
         #endregion
 
         #region Variables de Uso Interno
 
-        public int T { get; set; }
-        public int TPLL { get; set; }
-        public int NL { get; set; }
+        public static float T { get; set; }
+        public static float TPLL { get; set; }
+        public static int NL { get; set; }
 
-        public float IA { get; set; }
-        public float TA { get; set; }
-        public int TF { get; set; }
-        public List<float> N { get; set; }
-        public List<float> STP { get; set; }
-        public List<float> STA { get; set; }
-        public List<float> STE { get; set; }
-        public List<float> STO { get; set; }
-        public List<float> NA { get; set; }
-        public List<float> NE { get; set; }
-        public List<float> NA18 { get; set; }
-        public int ContMax { get; set; }
-        public int MinTA { get; set; }
-        public float MaxTE { get; set; }
-        public int ContMin { get; set; }
+        public static float IA { get; set; }
+        public static float TA { get; set; }
+        public static int TF { get; set; }
+        public static List<float> N { get; set; }
+        public static List<float> STP { get; set; }
+        public static List<float> STA { get; set; }
+        public static List<float> STE { get; set; }
+        public static List<float> STO { get; set; }
+        public static List<float> NA { get; set; }
+        public static List<float> NE { get; set; }
+        public static List<float> NA18 { get; set; }
+        public static int ContMax { get; set; }
+        public static float MinTA { get; set; }
+        public static float MaxTE { get; set; }
+        public static int ContMin { get; set; }
 
 
         #endregion
 
-        void Main(string[] args)
+        static void Main(string[] args)
         {
             n = 0;
             while (n==0)
@@ -82,7 +82,7 @@ namespace TPI_Simulacion
             }
 
             TF = 0;
-            while (n == 0)
+            while (TF == 0)
             {
                 Console.WriteLine("Ingrese el tiempo de duracion de la simulacion en minutos.");
                 var Ncadetes = Console.ReadLine();
@@ -103,6 +103,12 @@ namespace TPI_Simulacion
 
                 // Gen IA
                 IA = GeneradorIA.GenerarR();
+
+                // TPLL = T + IA
+                TPLL += IA;
+
+                // Gen TA
+                TA = GeneradorTA.GenerarR();
 
                 //Buscar Menor TCi
                 var TCi = BuscarMenorTC(TC);
@@ -150,7 +156,7 @@ namespace TPI_Simulacion
         }
 
 
-        private void CondicionesIniciales()
+        private static  void CondicionesIniciales()
         {
             T = 0;
             TPLL = 0;
@@ -176,13 +182,13 @@ namespace TPI_Simulacion
 
         }
 
-        private int BuscarMenorTC(List<float> tc)
+        private static  int BuscarMenorTC(List<float> tc)
         {
             var min = tc.Min();
             return tc.FindIndex(p => p == min);
         }
 
-        private bool TratarArrepentimiento(float tci, int indexTCi)
+        private static  bool TratarArrepentimiento(float tci, int indexTCi)
         {
             // TE = TCi - T
             var TE = tci - T;
@@ -221,7 +227,7 @@ namespace TPI_Simulacion
             return false;
         }
 
-        private void TratarEspera(int indexTCi)
+        private static  void TratarEspera(int indexTCi)
         {
             if (TC[indexTCi] - T > MaxTE)
             {
@@ -229,7 +235,7 @@ namespace TPI_Simulacion
             }
         }
 
-        private void CalculoResultados()
+        private static  void CalculoResultados()
         {
             for (int i = 0; i < n; i++)
             {
@@ -238,26 +244,62 @@ namespace TPI_Simulacion
                 PTE[i] = STE[i] / N[i];
                 PMNC[i] = (NA[i] * 100) / NE[i];
                 PA18[i] = (NA18[i] * 100) / NL;
-                PCMax[i] = (ContMax * 100) / N.Sum();
-                PCMin[i] = (ContMin * 100) / N.Sum();
+                PCMax = (ContMax * 100) / N.Sum();
+                PCMin = (ContMin * 100) / N.Sum();
             }
         }
 
-        private void ImprimirResultados()
+        private static  void ImprimirResultados()
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < n; i++)
+            {
+                Console.WriteLine("Para el cadete {0}, el Porcentaje de tiempo ocioso es {1}", i, PTO[i]);
+                Console.WriteLine("Para el cadete {0}, el Porcentaje de mandados que no se pudieron concretar debido al tiempo de demora es {1}", i , PMNC[i]);
+                Console.WriteLine("Para el cadete {0}, el Promedio de permanencia del cliente en el sistema es {1}", i, PPS[i]);
+                Console.WriteLine("Para el cadete {0}, el Promedio de tiempo en cola del cliente es {1}", i, PTE[i]);
+                Console.WriteLine("Para el cadete {0}, el Porcentaje de clientes que se arrepintieron porque el tiempo de espera era mayor a 18 minutos respecto del total de clientes que llamaron es {1}", i, PA18[i]);
+            }
+
+            Console.WriteLine("El Porcentaje de clientes que tuvieron el máximo tiempo de atención sobre todos los clientes atendidos es {0}", PCMax);
+            Console.WriteLine("El Porcentaje de clientes que tuvieron el mínimo tiempo de atención sobre todos los clientes atendidos: es {0}", PCMin);
+            Console.WriteLine("El Máximo tiempo de espera de un cliente: MaxTE es {0}", MaxTE);
+
+
+            ;
         }
 
 
 
-        private void TratarMinimo()
+        private static  void TratarMinimo()
         {
-            throw new NotImplementedException();
+            if (TA < MinTA)
+            {
+                MinTA = TA;
+                ContMin = 1;
+            }
+            else
+            {
+                if (TA == MinTA)
+                {
+                    ContMin++;
+                }
+            };
         }
 
-        private void TratarMaximo()
+        private static  void TratarMaximo()
         {
-            throw new NotImplementedException();
+            if (TA > MaxTA)
+            {
+                MaxTA = TA;
+                ContMax = 1;
+            }
+            else
+            {
+                if (TA == MaxTA)
+                {
+                    ContMax ++;
+                }
+            }
         }
 
 
