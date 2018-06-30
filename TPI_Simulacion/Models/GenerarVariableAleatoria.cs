@@ -16,8 +16,8 @@ namespace TPI_Simulacion.Models
                 {
                     DecimalAmount = 10000,
                     A = 0,
-                    B = 0.002083,
-                    RandomVariableDecimalAmount = 6,
+                    B = 3,
+                    RandomVariableDecimalAmount = 0,
                     RandomNumberDecimalAmount = 4,
 
                 };
@@ -29,9 +29,9 @@ namespace TPI_Simulacion.Models
                     RandomVariablegenerator = new RandomVariablegenerator
                     {
                         DecimalAmount = 10000,
-                        A = 0.003472,
-                        B = 0.008333,
-                        RandomVariableDecimalAmount = 6,
+                        A = 5,
+                        B = 12,
+                        RandomVariableDecimalAmount = 0,
                         RandomNumberDecimalAmount = 4,
 
                     };
