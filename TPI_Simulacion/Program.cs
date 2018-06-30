@@ -136,7 +136,7 @@ namespace TPI_Simulacion
                         STA[TCi] += TA;
                         NE[TCi]++;
                         Console.WriteLine();
-                        Console.WriteLine("STE[{0}]: {1}; TC[{0}: {2}; STA[{0}]: {3}; NE[{0}: {4}; ]", TCi, STE[TCi], TC[TCi], STA[TCi], NE[TCi]);
+                        Console.WriteLine("STE[{0}]: {1}; TC[{0}: {2}; STA[{0}]: {3}; NE[{0}]: {4}; ]", TCi, STE[TCi], TC[TCi], STA[TCi], NE[TCi]);
                         Console.WriteLine();
                     }
                     
@@ -212,7 +212,7 @@ namespace TPI_Simulacion
             // Generar r
             var randomNumbergenerator = new Random();
             float r = (float)(randomNumbergenerator.NextDouble());
-
+            Console.WriteLine("TE: {1}, r para el arrepentimiendo:{0}", r, TE);
             if (TE <= 15)
             {
                 if (r <= 0.62)
@@ -234,12 +234,13 @@ namespace TPI_Simulacion
                 {
                     //NA18i = NA18i + 1
                     NA18[indexTCi]++;
+                    Console.WriteLine("NA18[{0}] : {1}", indexTCi, NA18[indexTCi]);
                 }
             }
 
             //NAi = NAi + 1
             NA[indexTCi]++;
-
+            Console.WriteLine("NA[{0}]: {1}", indexTCi, NA[indexTCi]);
             return false;
         }
 
@@ -267,6 +268,7 @@ namespace TPI_Simulacion
                 PMNC[i] = (NA[i] * 100) / NE[i];
                 PA18[i] = (NA18[i] * 100) / NL;
 
+                Console.WriteLine("N[{0}]: {1}; NE[{0}]: {2}; NA[{0}]: {3}; NA18[{0}: {4};", i, N[i], NE[i], NA[i], NA18[i]);
 
                 Console.WriteLine("PTO[{0}]: {1}; PPS[{0}: {2}; PTE[{0}]: {3}; PMNC[{0}]: {4}; PA18[{0}: {5};", i, PTO[i], PPS[i], PTE[i], PMNC[i], PA18[i]);
                 Console.WriteLine();
