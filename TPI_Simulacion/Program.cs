@@ -67,6 +67,9 @@ namespace TPI_Simulacion
         public static float MaxTE { get; set; }
         public static int ContMin { get; set; }
 
+        //Para calcular la longitud de la replica
+        public static List<List<float>> S { get; set; }
+        public static List<double> DesviacionStandar { get; set; }
 
         #endregion
 
@@ -144,6 +147,8 @@ namespace TPI_Simulacion
                 // T> TCi
                 else
                 {
+                    
+
                     STO[TCi] += (T - TC[TCi]);
                     TC[TCi] = T + TA;
                     STA[TCi] += TA;
@@ -155,6 +160,7 @@ namespace TPI_Simulacion
 
                 if (NOarrepentido)
                 {
+                    S[TCi].Add(TC[TCi] - T);
                     STP[TCi] += (TC[TCi] - T);
                     N[TCi]++;
                     TratarMaximo();
@@ -195,7 +201,11 @@ namespace TPI_Simulacion
             NA = Enumerable.Repeat(defaultValue, n).ToList();
             NE = Enumerable.Repeat(defaultValue, n).ToList();
             NA18 = Enumerable.Repeat(defaultValue, n).ToList();
-
+            S = new List<List<float>>(n);
+            for (int i = 0; i < n; i++)
+            {
+                S.Add(new List<float>());
+            }
         }
 
         private static  int BuscarMenorTC(List<float> tc)
@@ -268,39 +278,84 @@ namespace TPI_Simulacion
                 PMNC[i] = (NA[i] * 100) / NE[i];
                 PA18[i] = (NA18[i] * 100) / NL;
 
-                Console.WriteLine("N[{0}]: {1}; NE[{0}]: {2}; NA[{0}]: {3}; NA18[{0}: {4};", i, N[i], NE[i], NA[i], NA18[i]);
+                //Console.WriteLine("N[{0}]: {1}; NE[{0}]: {2}; NA[{0}]: {3}; NA18[{0}: {4};", i, N[i], NE[i], NA[i], NA18[i]);
 
-                Console.WriteLine("PTO[{0}]: {1}; PPS[{0}: {2}; PTE[{0}]: {3}; PMNC[{0}]: {4}; PA18[{0}: {5};", i, PTO[i], PPS[i], PTE[i], PMNC[i], PA18[i]);
-                Console.WriteLine();
+                //Console.WriteLine("PTO[{0}]: {1}; PPS[{0}: {2}; PTE[{0}]: {3}; PMNC[{0}]: {4}; PA18[{0}: {5};", i, PTO[i], PPS[i], PTE[i], PMNC[i], PA18[i]);
+                //Console.WriteLine();
             }
             PCMax = (ContMax * 100) / N.Sum();
             PCMin = (ContMin * 100) / N.Sum();
-            Console.WriteLine("PCMax = {0}; PCmin = {1}", PCMax, PCMin);
-            Console.WriteLine("____________________________________________________________________");
-            Console.WriteLine();
+            //Console.WriteLine("PCMax = {0}; PCmin = {1}", PCMax, PCMin);
+            //Console.WriteLine("____________________________________________________________________");
+            //Console.WriteLine();
         }
 
         private static  void ImprimirResultados()
         {
-            Console.WriteLine();
-            Console.WriteLine("PTO: el Porcentaje de tiempo ocioso.");
-            Console.WriteLine("PMNC: el Porcentaje de mandados que no se pudieron concretar debido al tiempo de demora.");
-            Console.WriteLine("PPS: el Promedio de permanencia del cliente en el sistema.");
-            Console.WriteLine("PTE: el Promedio de tiempo en cola del cliente.");
-            Console.WriteLine("PA18: el Porcentaje de clientes que se arrepintieron porque el tiempo de espera era mayor a 18 minutos respecto del total de clientes que llamaron.");
-            Console.WriteLine();
-            Console.WriteLine("| Nº Cadetes  | PTO     | PMNC     | PPS      | PTE      |  PA18     |");
-            for (int i = 0; i < n; i++)
+            DesviacionStandar = new List<double>();
+            for(int i = 0; i < S.Count; i++)
             {
-                Console.WriteLine("|    {0}        | {1} | {2} | {3} | {4} | {5} |", i, PTO[i], PMNC[i], PPS[i], PTE[i], PA18[i]);
+                DesviacionStandar.Add(0);
+                Console.Write("Los T-TC del cadete {0} son: ", i);
+                
+                for (int j = 0; j < S[i].Count; j++)
+                {
+                    Console.Write("  {0}  ;", S[i][j]);
+                    
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("_________________________________________________________________");
+            for (int i = 0; i < S.Count; i++)
+            {
+                // Saca el promedio X de los TCi-T del cadete i
+                var X = (S[i].Sum()/ S[i].Count);
+
+                double sumatoria = 0;
+
+                // por cada TCi-T
+                for (int j = 0; j < S[i].Count; j++)
+                {
+                    // saca el valor absoluto de la resta x - X
+                    var resta = Math.Abs(S[i][j] - X);
+
+                    // lo eleva al cuadrado
+                    var restaAlCuadrado = Math.Pow(resta, 2);
+
+                    // acumula
+                    sumatoria += restaAlCuadrado;
+                }
+
+                // divide la sumatoria(x - X)^`2 / N
+                var dividoPorN = sumatoria / S[i].Count;
+
+                // aplico la raiz cuadrada
+                var RaizCuadrada = Math.Sqrt(dividoPorN);
+
+                // guardo en el arreglo
+                DesviacionStandar[i]= RaizCuadrada;
+                Console.WriteLine("El Promedio de permanencia del cliente en el sistema para el cadete {0} es {1}.", (i+1), PPS[i]);
+                Console.WriteLine("La desviacion estandar para el cadete {0} es {1} ", (i+1), RaizCuadrada);
+                Console.WriteLine();
             }
 
-            Console.WriteLine("El Porcentaje de clientes que tuvieron el máximo tiempo de atención sobre todos los clientes atendidos es {0}", PCMax);
-            Console.WriteLine("El Porcentaje de clientes que tuvieron el mínimo tiempo de atención sobre todos los clientes atendidos: es {0}", PCMin);
-            Console.WriteLine("El Máximo tiempo de espera de un cliente: MaxTE es {0}", MaxTE);
-            Console.ReadLine();
+            //Console.WriteLine();
+            //Console.WriteLine("PTO: el Porcentaje de tiempo ocioso.");
+            //Console.WriteLine("PMNC: el Porcentaje de mandados que no se pudieron concretar debido al tiempo de demora.");
+            
+            //Console.WriteLine("PTE: el Promedio de tiempo en cola del cliente.");
+            //Console.WriteLine("PA18: el Porcentaje de clientes que se arrepintieron porque el tiempo de espera era mayor a 18 minutos respecto del total de clientes que llamaron.");
+            //Console.WriteLine();
+            //Console.WriteLine("| Nº Cadetes  | PTO     | PMNC     | PPS      | PTE      |  PA18     |");
+            //for (int i = 0; i < n; i++)
+            //{
+            //    Console.WriteLine("|    {0}        | {1} | {2} | {3} | {4} | {5} |", i, PTO[i], PMNC[i], PPS[i], PTE[i], PA18[i]);
+            //}
 
-            ;
+            //Console.WriteLine("El Porcentaje de clientes que tuvieron el máximo tiempo de atención sobre todos los clientes atendidos es {0}", PCMax);
+            //Console.WriteLine("El Porcentaje de clientes que tuvieron el mínimo tiempo de atención sobre todos los clientes atendidos: es {0}", PCMin);
+            //Console.WriteLine("El Máximo tiempo de espera de un cliente: MaxTE es {0}", MaxTE);
+            Console.ReadLine();
         }
 
 
