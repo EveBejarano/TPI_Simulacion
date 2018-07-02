@@ -119,8 +119,8 @@ namespace TPI_Simulacion
                 Console.WriteLine("N° cadete con menor TCi: {0}", TCi);
                 var NOarrepentido = true;
 
-                // T <= TCi
-                if (T <= TC[TCi])
+                // T < TCi
+                if (T < TC[TCi])
                 {
                     // Tratar Arrepentimiento
                     NOarrepentido = TratarArrepentimiento(TC[TCi], TCi);
