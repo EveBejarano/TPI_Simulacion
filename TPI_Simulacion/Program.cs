@@ -123,7 +123,7 @@ namespace TPI_Simulacion
                 var NOarrepentido = true;
 
                 // T <= TCi
-                if (T <= TC[TCi])
+                if (T < TC[TCi])
                 {
                     // Tratar Arrepentimiento
                     NOarrepentido = TratarArrepentimiento(TC[TCi], TCi);
