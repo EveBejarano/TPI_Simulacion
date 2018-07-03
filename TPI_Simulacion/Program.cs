@@ -74,7 +74,7 @@ namespace TPI_Simulacion
         static void Main(string[] args)
         {
             n = 0;
-            while (n==0)
+            while (n<=0)
             {
                 Console.WriteLine("Ingrese la cantidad de cadetes.");
                 var Ncadetes = Console.ReadLine();
@@ -510,7 +510,8 @@ namespace TPI_Simulacion
             
             string path = "TPiSimulacion-" + System.DateTime.Now + ".xlsx";
             path = path.Replace(":", ".");
-            wb.SaveAs(path);
+            path = path.Replace("/", ".");
+            wb.SaveAs("Resultados/"+path);
             Console.ReadLine();
 
             ;
