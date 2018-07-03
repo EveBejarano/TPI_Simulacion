@@ -81,14 +81,14 @@ namespace TPI_Simulacion
                 n = a;
             }
 
-            TF = 0;
-            while (TF == 0)
-            {
-                Console.WriteLine("Ingrese el tiempo de duracion de la simulacion en minutos.");
-                var Ncadetes = Console.ReadLine();
-                int.TryParse(Ncadetes, out var a);
-                TF = a;
-            }
+            
+            //while (TF == 0)
+            //{
+            //    Console.WriteLine("Ingrese el tiempo de duracion de la simulacion en minutos.");
+            //    var Ncadetes = Console.ReadLine();
+            //    int.TryParse(Ncadetes, out var a);
+            //    TF = a;
+            //}
 
             GeneradorIA = new GenerarVariableAleatoria("IA");
             GeneradorTA = new GenerarVariableAleatoria("TA");
@@ -97,8 +97,8 @@ namespace TPI_Simulacion
             Console.WriteLine("____________________________________________________________________");
             // Condiciones Iniciales
             CondicionesIniciales();
-
-            while(T <= TF)
+            Console.WriteLine("TF = {0}", TF);
+            while (T <= TF)
             {
 
                 Console.WriteLine("T:{0}", T);
@@ -164,7 +164,10 @@ namespace TPI_Simulacion
                     Console.WriteLine();
                 }
                 // Si se arrepintio el cliente cuando T<= TCi, entonces "retorna aca"
-                Console.WriteLine("____________________________________________________________________");
+
+                NL++;
+            Console.WriteLine("NL: {0}", NL);
+            Console.WriteLine("____________________________________________________________________");
             }
 
             CalculoResultados();
@@ -175,6 +178,7 @@ namespace TPI_Simulacion
         private static  void CondicionesIniciales()
         {
             T = 0;
+            TF = 377;
             TPLL = 0;
             NL = 0;
 
@@ -265,7 +269,7 @@ namespace TPI_Simulacion
                 PTO[i] = (STO[i] * 100) / T;
                 PPS[i] = STP[i] / N[i];
                 PTE[i] = STE[i] / N[i];
-                PMNC[i] = (NA[i] * 100) / NE[i];
+                PMNC[i] = (NA[i] * 100) / NL;
                 PA18[i] = (NA18[i] * 100) / NL;
 
                 Console.WriteLine("N[{0}]: {1}; NE[{0}]: {2}; NA[{0}]: {3}; NA18[{0}: {4};", i, N[i], NE[i], NA[i], NA18[i]);
@@ -289,10 +293,10 @@ namespace TPI_Simulacion
             Console.WriteLine("PTE: el Promedio de tiempo en cola del cliente.");
             Console.WriteLine("PA18: el Porcentaje de clientes que se arrepintieron porque el tiempo de espera era mayor a 18 minutos respecto del total de clientes que llamaron.");
             Console.WriteLine();
-            Console.WriteLine("| Nº Cadetes  | PTO     | PMNC     | PPS      | PTE      |  PA18     |");
+            Console.WriteLine("| Nº Cadetes | PTO     | PMNC     | PPS      | PTE      |  PA18     |");
             for (int i = 0; i < n; i++)
             {
-                Console.WriteLine("|    {0}        | {1} | {2} | {3} | {4} | {5} |", i, PTO[i], PMNC[i], PPS[i], PTE[i], PA18[i]);
+                Console.WriteLine("|    {0}      | {1} | {2} | {3} | {4} | {5} |", i, PTO[i], PMNC[i], PPS[i], PTE[i], PA18[i]);
             }
 
             Console.WriteLine("El Porcentaje de clientes que tuvieron el máximo tiempo de atención sobre todos los clientes atendidos es {0}", PCMax);
