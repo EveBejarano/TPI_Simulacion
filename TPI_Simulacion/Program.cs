@@ -75,20 +75,13 @@ namespace TPI_Simulacion
             n = 0;
             while (n==0)
             {
-                Console.WriteLine("Ingrese la cantidad de Cadetes.");
+                Console.WriteLine("Ingrese la cantidad de cadetes.");
                 var Ncadetes = Console.ReadLine();
                 int.TryParse(Ncadetes, out var a);
                 n = a;
             }
 
-            
-            //while (TF == 0)
-            //{
-            //    Console.WriteLine("Ingrese el tiempo de duracion de la simulacion en minutos.");
-            //    var Ncadetes = Console.ReadLine();
-            //    int.TryParse(Ncadetes, out var a);
-            //    TF = a;
-            //}
+
 
             GeneradorIA = new GenerarVariableAleatoria("IA");
             GeneradorTA = new GenerarVariableAleatoria("TA");
@@ -97,26 +90,25 @@ namespace TPI_Simulacion
             Console.WriteLine("____________________________________________________________________");
             // Condiciones Iniciales
             CondicionesIniciales();
-            Console.WriteLine("TF = {0}", TF);
             while (T <= TF)
             {
 
-                Console.WriteLine("T:{0}", T);
+                
                 // T= TPLL
                 T = TPLL;
-                Console.WriteLine("T = TPLL: {0}", T);
+                
                 // Gen IA
                 IA = GeneradorIA.GenerarR();
 
                 // TPLL = T + IA
                 TPLL += IA;
-                Console.WriteLine("TPLL:{0} IA: {1}", TPLL, IA);
+                
                 // Gen TA
                 TA = GeneradorTA.GenerarR();
-                Console.WriteLine("TA: {0}", TA);
+                
                 //Buscar Menor TCi
                 var TCi = BuscarMenorTC(TC);
-                Console.WriteLine("N° cadete con menor TCi: {0}", TCi);
+                
                 var NOarrepentido = true;
 
                 // T < TCi
@@ -124,7 +116,7 @@ namespace TPI_Simulacion
                 {
                     // Tratar Arrepentimiento
                     NOarrepentido = TratarArrepentimiento(TC[TCi], TCi);
-                    Console.WriteLine("No Arrepentido: {0} ", NOarrepentido);
+                    
                     // No arrepentido
                     if (NOarrepentido)
                     {
@@ -135,9 +127,6 @@ namespace TPI_Simulacion
                         TC[TCi] += TA;
                         STA[TCi] += TA;
                         NE[TCi]++;
-                        Console.WriteLine();
-                        Console.WriteLine("STE[{0}]: {1}; TC[{0}: {2}; STA[{0}]: {3}; NE[{0}]: {4}; ]", TCi, STE[TCi], TC[TCi], STA[TCi], NE[TCi]);
-                        Console.WriteLine();
                     }
                     
                 }
@@ -147,9 +136,6 @@ namespace TPI_Simulacion
                     STO[TCi] += (T - TC[TCi]);
                     TC[TCi] = T + TA;
                     STA[TCi] += TA;
-                    Console.WriteLine();
-                    Console.WriteLine("STO[{0}]: {1}; TC[{0}: {2}; STA[{0}]: {3}]", TCi, STO[TCi], TC[TCi], STA[TCi], NE[TCi]);
-                    Console.WriteLine();
                 }
                 // Fin condicional T<= TCi
 
@@ -159,15 +145,10 @@ namespace TPI_Simulacion
                     N[TCi]++;
                     TratarMaximo();
                     TratarMinimo();
-                    Console.WriteLine();
-                    Console.WriteLine("STP[{0}]: {1}; N[{0}: {2}]", TCi, STP[TCi], N[TCi]);
-                    Console.WriteLine();
                 }
                 // Si se arrepintio el cliente cuando T<= TCi, entonces "retorna aca"
 
                 NL++;
-            Console.WriteLine("NL: {0}", NL);
-            Console.WriteLine("____________________________________________________________________");
             }
 
             CalculoResultados();
@@ -216,7 +197,7 @@ namespace TPI_Simulacion
             // Generar r
             var randomNumbergenerator = new Random();
             float r = (float)(randomNumbergenerator.NextDouble());
-            Console.WriteLine("TE: {1}, r para el arrepentimiendo:{0}", r, TE);
+            
             if (TE <= 15)
             {
                 if (r <= 0.62)
@@ -238,13 +219,13 @@ namespace TPI_Simulacion
                 {
                     //NA18i = NA18i + 1
                     NA18[indexTCi]++;
-                    Console.WriteLine("NA18[{0}] : {1}", indexTCi, NA18[indexTCi]);
+                    
                 }
             }
 
             //NAi = NAi + 1
             NA[indexTCi]++;
-            Console.WriteLine("NA[{0}]: {1}", indexTCi, NA[indexTCi]);
+            
             return false;
         }
 
@@ -271,17 +252,11 @@ namespace TPI_Simulacion
                 PTE[i] = STE[i] / N[i];
                 PMNC[i] = (NA[i] * 100) / NL;
                 PA18[i] = (NA18[i] * 100) / NL;
-
-                Console.WriteLine("N[{0}]: {1}; NE[{0}]: {2}; NA[{0}]: {3}; NA18[{0}: {4};", i, N[i], NE[i], NA[i], NA18[i]);
-
-                Console.WriteLine("PTO[{0}]: {1}; PPS[{0}: {2}; PTE[{0}]: {3}; PMNC[{0}]: {4}; PA18[{0}: {5};", i, PTO[i], PPS[i], PTE[i], PMNC[i], PA18[i]);
-                Console.WriteLine();
+                
             }
             PCMax = (ContMax * 100) / N.Sum();
             PCMin = (ContMin * 100) / N.Sum();
-            Console.WriteLine("PCMax = {0}; PCmin = {1}", PCMax, PCMin);
-            Console.WriteLine("____________________________________________________________________");
-            Console.WriteLine();
+
         }
 
         private static  void ImprimirResultados()
@@ -296,12 +271,14 @@ namespace TPI_Simulacion
             Console.WriteLine("| Nº Cadetes | PTO     | PMNC     | PPS      | PTE      |  PA18     |");
             for (int i = 0; i < n; i++)
             {
-                Console.WriteLine("|    {0}      | {1} | {2} | {3} | {4} | {5} |", i, PTO[i], PMNC[i], PPS[i], PTE[i], PA18[i]);
+                Console.WriteLine("|    {0}      | {1}   | {2}   | {3}   | {4}   | {5}   |", i, PTO[i], PMNC[i], PPS[i], PTE[i], PA18[i]);
             }
-
-            Console.WriteLine("El Porcentaje de clientes que tuvieron el máximo tiempo de atención sobre todos los clientes atendidos es {0}", PCMax);
-            Console.WriteLine("El Porcentaje de clientes que tuvieron el mínimo tiempo de atención sobre todos los clientes atendidos: es {0}", PCMin);
-            Console.WriteLine("El Máximo tiempo de espera de un cliente: MaxTE es {0}", MaxTE);
+            Console.WriteLine();
+            Console.WriteLine("El Porcentaje de clientes que tuvieron el máximo tiempo de atención sobre todos los clientes atendidos es {0}.", PCMax);
+            Console.WriteLine();
+            Console.WriteLine("El Porcentaje de clientes que tuvieron el mínimo tiempo de atención sobre todos los clientes atendidos es {0}.", PCMin);
+            Console.WriteLine();
+            Console.WriteLine("El Máximo tiempo de espera de un cliente es {0} minutos.", (short)MaxTE);
             Console.ReadLine();
 
             ;
